@@ -8,7 +8,7 @@ def run(plan,
         max_cpu=1000,
         min_memory=128,
         max_memory=2048,
-        node_selectors={},
+        node_selectors=None,
 ):
     """ Starts a Prometheus server that scrapes metrics off the provided prometheus metrics configurations.
 
@@ -46,7 +46,7 @@ def run(plan,
         max_cpu(int): max cpu for prometheus instance
         min_memory(int): min memory for prometheus instance
         max_memory(int): max memory for prometheus instance
-        node_selectors(dict): set node_selectors for running this instance on a particular node (kubernetes only)
+        node_selectors (dict): Define a dict of node selectors - only works in kubernetes example: {"kubernetes.io/hostname": node-name-01}
     Returns:
         prometheus_url: endpoint to prometheus service inside the enclave (eg. 123.123.212:9090)
     """
@@ -67,6 +67,9 @@ def run(plan,
     )
 
     config_file_path= CONFIG_DIR + "/" + CONFIG_FILENAME
+
+    if node_selectors == None:
+        node_selectors = {}
 
     prometheus_service = plan.add_service(name="prometheus", config=ServiceConfig(
         image="prom/prometheus:latest",
