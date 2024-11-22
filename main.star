@@ -78,7 +78,7 @@ def run(
     if node_selectors == None:
         node_selectors = {}
 
-    if image="":
+    if image == "":
         image="prom/prometheus:latest"
 
     prometheus_service = plan.add_service(
