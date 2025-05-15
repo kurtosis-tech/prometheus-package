@@ -15,6 +15,7 @@ def run(
     storage_tsdb_retention_time="1d",
     storage_tsdb_retention_size="512MB",
     image="",
+    public_ports={},
 ):
     """Starts a Prometheus server that scrapes metrics off the provided prometheus metrics configurations.
 
@@ -114,6 +115,7 @@ def run(
             min_memory=min_memory,
             max_memory=max_memory,
             node_selectors=node_selectors,
+            public_ports=public_ports,
         ),
     )
 
