@@ -86,8 +86,6 @@ def run(
     if image=="":
         image="prom/prometheus:latest"
 
-    public_ports = public_ports
-
     prometheus_service = plan.add_service(
         name=name,
         config=ServiceConfig(
