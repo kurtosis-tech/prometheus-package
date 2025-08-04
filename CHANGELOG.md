@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.0](https://github.com/kurtosis-tech/prometheus-package/compare/1.0.0...1.1.0) (2025-08-04)
+
+
+### Features
+
+* add public ports support ([a7e0b65](https://github.com/kurtosis-tech/prometheus-package/commit/a7e0b6502cac4f6f99bd8cec7876c97abcb806e6))
+* add public ports support ([#19](https://github.com/kurtosis-tech/prometheus-package/issues/19)) ([fd80185](https://github.com/kurtosis-tech/prometheus-package/commit/fd8018504aa6e355815b9f934f30261f4106f4a3))
+* add tolerations ([1d51de2](https://github.com/kurtosis-tech/prometheus-package/commit/1d51de26a722c35da413cdb737500a0c4dfdd004))
+* add tolerations ([#21](https://github.com/kurtosis-tech/prometheus-package/issues/21)) ([4af5851](https://github.com/kurtosis-tech/prometheus-package/commit/4af5851299e4593b5bddfe1e7b3226c4e24b96c1))
+
 ## [1.0.0](https://github.com/kurtosis-tech/prometheus-package/compare/0.0.1...1.0.0) (2025-03-12)
 
 
