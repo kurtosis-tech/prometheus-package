@@ -12,6 +12,7 @@ def run(
     min_memory=128,
     max_memory=2048,
     node_selectors=None,
+    tolerations=None,
     storage_tsdb_retention_time="1d",
     storage_tsdb_retention_size="512MB",
     image="",
@@ -61,6 +62,7 @@ def run(
         min_memory(int): min memory for prometheus instance (default: 128MB)
         max_memory(int): max memory for prometheus instance (default: 2048MB)
         node_selectors (dict[string, string]): Define a dict of node selectors - only works in kubernetes example: {"kubernetes.io/hostname": node-name-01}
+        tolerations (list[dict]): Define a list of tolerations - only works in kubernetes example: [{"key": "key", "operator": "Equal", "value": "value", "effect": "NoSchedule"}]
     Returns:
         prometheus_url: endpoint to prometheus service inside the enclave (eg. 123.123.212:9090)
     """
@@ -82,6 +84,9 @@ def run(
 
     if node_selectors == None:
         node_selectors = {}
+
+    if tolerations == None:
+        tolerations = []
 
     if image=="":
         image="prom/prometheus:latest"
@@ -115,6 +120,7 @@ def run(
             min_memory=min_memory,
             max_memory=max_memory,
             node_selectors=node_selectors,
+            tolerations=tolerations,
             public_ports=public_ports,
         ),
     )
