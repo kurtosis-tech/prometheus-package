@@ -14,3 +14,31 @@ scrape_configs:
         {{- end }}
     fallback_scrape_protocol: "{{ $job.FallbackScrapeProtocol }}"
   {{- end }}
+{{- if .RemoteWriteConfigs }}
+remote_write:
+{{- range $rw := .RemoteWriteConfigs }}
+  - url: {{ $rw.Url }}
+{{- if $rw.BearerToken }}
+    authorization:
+      credentials: "{{ $rw.BearerToken }}"
+{{- end }}
+{{- if $rw.WriteRelabelConfigs }}
+    write_relabel_configs:
+{{- range $rc := $rw.WriteRelabelConfigs }}
+      - source_labels: [{{ range $i, $l := $rc.SourceLabels }}{{ if $i }}, {{ end }}{{ $l }}{{ end }}]
+{{- if $rc.Regex }}
+        regex: '{{ $rc.Regex }}'
+{{- end }}
+{{- if $rc.TargetLabel }}
+        target_label: {{ $rc.TargetLabel }}
+{{- end }}
+{{- if $rc.Replacement }}
+        replacement: '{{ $rc.Replacement }}'
+{{- end }}
+{{- if $rc.Action }}
+        action: {{ $rc.Action }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
