@@ -17,6 +17,7 @@ def run(
     storage_tsdb_retention_size="512MB",
     image="",
     public_ports={},
+    remote_write_configs=[],
 ):
     """Starts a Prometheus server that scrapes metrics off the provided prometheus metrics configurations.
 
@@ -63,12 +64,40 @@ def run(
         max_memory(int): max memory for prometheus instance (default: 2048MB)
         node_selectors (dict[string, string]): Define a dict of node selectors - only works in kubernetes example: {"kubernetes.io/hostname": node-name-01}
         tolerations (list[dict]): Define a list of tolerations - only works in kubernetes example: [{"key": "key", "operator": "Equal", "value": "value", "effect": "NoSchedule"}]
+        remote_write_configs(json): An optional list of Prometheus remote_write targets. Omit/empty to disable remote_write.
+           More info on remote_write here: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
+           eg.
+           ```
+           remote_write_configs: [
+                {
+                    # remote_write endpoint URL (required)
+                    Url: "https://example.com/api/v1/write",
+
+                    # bearer token sent as `authorization: credentials` (optional)
+                    BearerToken: "",
+
+                    # optional list of write_relabel_configs; each entry mirrors a
+                    # Prometheus relabel_config (SourceLabels is required, the rest optional)
+                    WriteRelabelConfigs: [
+                        {
+                            SourceLabels: ["job"],
+                            Regex: ".*",
+                            Action: "keep",
+                            # TargetLabel/Replacement also supported for "replace" actions
+                        },
+                    ],
+                },
+            ]
+           ```
     Returns:
         prometheus_url: endpoint to prometheus service inside the enclave (eg. 123.123.212:9090)
     """
     prometheus_config_template = read_file(src="./static-files/prometheus.yml.tmpl")
 
-    prometheus_config_data = {"MetricsJobs": get_metrics_jobs(metrics_jobs)}
+    prometheus_config_data = {
+        "MetricsJobs": get_metrics_jobs(metrics_jobs),
+        "RemoteWriteConfigs": remote_write_configs,
+    }
 
     prom_config_files_artifact = plan.render_templates(
         config={
